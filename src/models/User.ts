@@ -5,6 +5,12 @@ export interface IUser extends Document {
   email: string;
   password?: string;
   image?: string;
+  settings: {
+    semanticSearch: boolean;
+    autoTagging: boolean;
+    frequency: number;
+    theme: 'dark' | 'light' | 'system';
+  };
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,6 +21,12 @@ const UserSchema: Schema = new Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String }, // Optional for OAuth, but required for Credentials
     image: { type: String },
+    settings: {
+      semanticSearch: { type: Boolean, default: true },
+      autoTagging: { type: Boolean, default: true },
+      frequency: { type: Number, default: 70 },
+      theme: { type: String, enum: ['dark', 'light', 'system'], default: 'dark' },
+    },
   },
   { timestamps: true }
 );

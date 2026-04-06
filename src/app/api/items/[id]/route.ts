@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/mongodb';
 import Item from '@/models/Item';
 import { getPineconeIndex } from '@/lib/pinecone';
@@ -9,9 +11,16 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     await connectDB();
     const { id } = await params;
-    const item = await Item.findById(id).lean();
+    
+    // Find item and ensure it belongs to the user
+    const item = await Item.findOne({ _id: id, userId: session.user.id }).lean();
     if (!item) return NextResponse.json({ error: 'Item not found' }, { status: 404 });
 
     // Update lastAccessedAt
@@ -38,7 +47,11 @@ export async function GET(
               score: m.score,
             }));
           
-          const rawItems = await Item.find({ _id: { $in: relatedIds.map(r => r.itemId) } })
+          // Filter related items by user as well
+          const rawItems = await Item.find({ 
+            _id: { $in: relatedIds.map(r => r.itemId) },
+            userId: session.user.id 
+          })
             .select('title type tags thumbnail summary')
             .lean();
           
@@ -66,15 +79,25 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     await connectDB();
     const { id } = await params;
+    
+    // Ensure ownership before update
+    const existing = await Item.findOne({ _id: id, userId: session.user.id });
+    if (!existing) return NextResponse.json({ error: 'Item not found' }, { status: 404 });
+
     const body = await request.json();
     const allowed = ['title', 'url', 'type', 'content', 'tags', 'summary', 'highlights', 'isArchived', 'isBookmarked', 'collections'];
     const updates = Object.fromEntries(
       Object.entries(body).filter(([key]) => allowed.includes(key))
     );
+    
     const item = await Item.findByIdAndUpdate(id, updates, { new: true });
-    if (!item) return NextResponse.json({ error: 'Item not found' }, { status: 404 });
     return NextResponse.json({ item });
   } catch (error) {
     console.error('PATCH /api/items/[id] error:', error);
@@ -88,9 +111,16 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     await connectDB();
     const { id } = await params;
-    const item = await Item.findByIdAndDelete(id);
+    
+    // Ensure ownership before delete
+    const item = await Item.findOneAndDelete({ _id: id, userId: session.user.id });
     if (!item) return NextResponse.json({ error: 'Item not found' }, { status: 404 });
 
     const embeddingId = (item as { embeddingId?: string }).embeddingId;

@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/mongodb';
 import Item from '@/models/Item';
 import { generateQueryEmbedding } from '@/lib/cohere';
@@ -7,6 +9,12 @@ import { getPineconeIndex } from '@/lib/pinecone';
 // POST /api/search — semantic search using Cohere + Pinecone
 export async function POST(request: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const userId = session.user.id;
     const body = await request.json();
     const { query, type, limit = 10 } = body;
 
@@ -35,6 +43,7 @@ export async function POST(request: NextRequest) {
       // Fallback to MongoDB text search
       const textResults = await Item.find({
         $text: { $search: query },
+        userId,
         isArchived: false,
         ...(type ? { type } : {}),
       })
@@ -53,9 +62,10 @@ export async function POST(request: NextRequest) {
     const matches = pineconeResults.matches.filter((m) => m.score && m.score > 0.5);
     const itemIds = matches.map((m) => (m.metadata as { itemId: string }).itemId);
 
-    // Fetch full items from MongoDB
+    // Fetch full items from MongoDB — CRITICAL: Filter by userId
     const items = await Item.find({
       _id: { $in: itemIds },
+      userId,
       isArchived: false,
       ...(type ? { type } : {}),
     }).lean();
@@ -63,11 +73,14 @@ export async function POST(request: NextRequest) {
     // Merge with scores and sort by score
     const itemMap = new Map(items.map((item) => [item._id.toString(), item]));
     const results = matches
-      .map((match) => ({
-        item: itemMap.get((match.metadata as { itemId: string }).itemId),
-        score: match.score ?? 0,
-        matchType: 'semantic' as const,
-      }))
+      .map((match) => {
+        const itemId = (match.metadata as { itemId: string }).itemId;
+        return {
+          item: itemMap.get(itemId),
+          score: match.score ?? 0,
+          matchType: 'semantic' as const,
+        };
+      })
       .filter((r) => r.item !== undefined)
       .slice(0, limit);
 

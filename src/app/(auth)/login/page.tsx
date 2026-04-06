@@ -51,7 +51,7 @@ function LoginForm() {
         className="relative"
       >
         {/* Glow Effect */}
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur opacity-30" />
+        <div className="absolute -inset-0.5 bg-linear-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur opacity-30" />
         
         <div className="relative bg-[#0A0A0A]/80 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 md:p-10 shadow-2xl">
           <div className="text-center mb-10">

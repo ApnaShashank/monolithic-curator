@@ -1,13 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/mongodb';
 import Item from '@/models/Item';
 import { generateEmbedding, generateTags, generateSummary } from '@/lib/cohere';
 import { getPineconeIndex } from '@/lib/pinecone';
 import { getUrlMetadata, detectType } from '@/lib/scraper';
 
+const ALLOWED_ORIGIN = 'chrome-extension://ldoplonillkhkkheimlcdacehpiaoojp';
+
+function corsHeaders(origin: string | null) {
+  const headers: Record<string, string> = {
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Credentials': 'true',
+  };
+  if (origin === ALLOWED_ORIGIN) {
+    headers['Access-Control-Allow-Origin'] = ALLOWED_ORIGIN;
+  }
+  return headers;
+}
+
+export async function OPTIONS(request: NextRequest) {
+  return NextResponse.json({}, { headers: corsHeaders(request.headers.get('origin')) });
+}
+
 // GET /api/items — fetch all items with optional filters
 export async function GET(request: NextRequest) {
+  const origin = request.headers.get('origin');
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders(origin) });
+    }
+
     await connectDB();
 
     const { searchParams } = new URL(request.url);
@@ -19,8 +45,9 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20');
     const archived = searchParams.get('archived') === 'true';
 
+    const userId = session.user.id;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const filter: any = { isArchived: archived };
+    const filter: any = { userId, isArchived: archived };
     if (type) filter.type = type;
     if (tag) filter.tags = tag;
     if (collection) filter.collections = collection;
@@ -37,7 +64,7 @@ export async function GET(request: NextRequest) {
     ]);
 
     const tagCounts = await Item.aggregate([
-      { $match: { isArchived: false } },
+      { $match: { userId: new Object(userId), isArchived: false } },
       { $unwind: '$tags' },
       { $group: { _id: '$tags', count: { $sum: 1 } } },
       { $sort: { count: -1 } },
@@ -45,7 +72,7 @@ export async function GET(request: NextRequest) {
     ]);
 
     const typeCounts = await Item.aggregate([
-      { $match: { isArchived: false } },
+      { $match: { userId: new Object(userId), isArchived: false } },
       { $group: { _id: '$type', count: { $sum: 1 } } },
     ]);
 
@@ -56,24 +83,30 @@ export async function GET(request: NextRequest) {
       totalPages: Math.ceil(total / limit),
       tagCounts: tagCounts.map((t) => ({ tag: t._id, count: t.count })),
       typeCounts: typeCounts.reduce((acc, t) => ({ ...acc, [t._id]: t.count }), {}),
-    });
+    }, { headers: corsHeaders(origin) });
   } catch (error) {
     console.error('GET /api/items error:', error);
-    return NextResponse.json({ error: 'Failed to fetch items' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch items' }, { status: 500, headers: corsHeaders(origin) });
   }
 }
 
 // POST /api/items — save a new item with rich metadata
 export async function POST(request: NextRequest) {
+  const origin = request.headers.get('origin');
   let body: any = {};
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders(origin) });
+    }
+
     await connectDB();
 
     body = await request.json();
     let { title, url, type, content, thumbnail, source, metadata, collections } = body;
 
     if (!url && !title) {
-      return NextResponse.json({ error: 'Title or URL is required' }, { status: 400 });
+      return NextResponse.json({ error: 'Title or URL is required' }, { status: 400, headers: corsHeaders(origin) });
     }
 
     if (!type && url) {
@@ -116,6 +149,7 @@ export async function POST(request: NextRequest) {
     }
 
     const item = await Item.create({
+      userId: session.user.id,
       title: title?.trim() || url || 'Untitled Entry',
       url,
       type: type || 'link',
@@ -130,24 +164,24 @@ export async function POST(request: NextRequest) {
     });
 
     // Background AI processing (non-blocking)
-    processItemWithAI(item._id.toString(), title || url || '', content || title || '')
+    processItemWithAI(item._id.toString(), session.user.id, title || url || '', content || title || '')
       .catch((err) => console.error('AI processing failed:', err));
 
     return NextResponse.json(
       { item, message: 'Captured. Processing AI enrichment...' }, 
-      { status: 201 }
+      { status: 201, headers: corsHeaders(origin) }
     );
   } catch (error) {
     console.error('POST /api/items error:', error, 'Body:', body);
     return NextResponse.json(
       { error: 'Failed to save item', details: error instanceof Error ? error.message : String(error) }, 
-      { status: 500 }
+      { status: 500, headers: corsHeaders(origin) }
     );
   }
 }
 
 // AI processing pipeline
-async function processItemWithAI(itemId: string, title: string, content: string) {
+async function processItemWithAI(itemId: string, userId: string, title: string, content: string) {
   await connectDB();
 
   const textForAI = `${title}\n\n${content}`.slice(0, 3000);
@@ -175,6 +209,7 @@ async function processItemWithAI(itemId: string, title: string, content: string)
         values: embedding,
         metadata: { 
           itemId, 
+          userId,
           title, 
           type: 'item',
           createdAt: new Date().toISOString()

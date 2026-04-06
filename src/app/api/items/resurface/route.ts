@@ -1,15 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/mongodb';
 import Item from '@/models/Item';
+import mongoose from 'mongoose';
 
 export async function GET() {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     await connectDB();
 
-    // Fetch 3 random items that are at least 1 week old (if possible)
-    // Using aggregation for random sampling
+    // Fetch random items for the specific user
     const resurfaced = await Item.aggregate([
-      { $match: { isArchived: false } },
+      { $match: { userId: new mongoose.Types.ObjectId(session.user.id), isArchived: false } },
       { $sample: { size: 4 } }
     ]);
 

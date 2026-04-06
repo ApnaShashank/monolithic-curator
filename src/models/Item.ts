@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IItem extends Document {
   _id: mongoose.Types.ObjectId;
+  userId: mongoose.Types.ObjectId;
   id: string;
   title: string;
   url?: string;
@@ -35,6 +36,7 @@ export interface IItem extends Document {
 
 const ItemSchema = new Schema<IItem>(
   {
+    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true, index: true },
     title: { type: String, required: true, trim: true },
     url: { type: String, trim: true },
     type: {

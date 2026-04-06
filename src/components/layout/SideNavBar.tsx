@@ -24,6 +24,7 @@ export default function SideNavBar() {
 
   const bottomItems = [
     { name: "Settings", href: "/settings", icon: "tune" },
+    { name: "Extension", href: "/extension", icon: "extension" },
   ];
 
   const handleSignOut = () => {
