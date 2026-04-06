@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monolithic Curator</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="badge">Capture</span>
+            <h1>Save to Brain</h1>
+        </div>
+        
+        <div id="content">
+            <div class="field">
+                <label>Title</label>
+                <input id="title" type="text" />
+            </div>
+            <div class="field">
+                <label>Source</label>
+                <p id="url" class="url-display"></p>
+            </div>
+            
+            <button id="saveBtn">Capture</button>
+            <div id="status"></div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
