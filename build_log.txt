@@ -1,0 +1,24 @@
+
+> monolithic-curator@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.2.2 (Turbopack)
+- Environments: .env.local
+
+ΓÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 8.8s
+  Running TypeScript ...
+Failed to type check.
+
+./src/app/api/items/route.ts:17:39
+Type error: Cannot find name 'archived'.
+
+  15 |
+  16 |     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+> 17 |     const filter: any = { isArchived: archived };
+     |                                       ^
+  18 |     if (type) filter.type = type;
+  19 |     if (tag) filter.tags = tag;
+  20 |     if (collection) filter.collections = collection;
+Next.js build worker exited with code: 1 and signal: null

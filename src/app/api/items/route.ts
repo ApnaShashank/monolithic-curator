@@ -12,6 +12,12 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const collection = searchParams.get('collection');
+    const type = searchParams.get('type');
+    const tag = searchParams.get('tag');
+    const sort = searchParams.get('sort') || 'newest';
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '20');
+    const archived = searchParams.get('archived') === 'true';
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const filter: any = { isArchived: archived };
