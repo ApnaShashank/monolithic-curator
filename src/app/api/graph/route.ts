@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/mongodb';
 import Item from '@/models/Item';
 import { getPineconeIndex } from '@/lib/pinecone';
@@ -6,9 +8,15 @@ import { getPineconeIndex } from '@/lib/pinecone';
 // GET /api/graph — get knowledge graph nodes and edges
 export async function GET() {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const userId = session.user.id;
     await connectDB();
 
-    const items = await Item.find({ isArchived: false })
+    const items = await Item.find({ userId, isArchived: false })
       .select('_id title type tags url source siteName metadata embeddingId createdAt')
       .limit(100)
       .lean();
@@ -38,10 +46,11 @@ export async function GET() {
       for (let j = i + 1; j < items.length; j++) {
         const tagsA = new Set(items[i].tags);
         const tagsB = new Set(items[j].tags);
-        const sharedTags = [...tagsA].filter((t) => tagsB.has(t));
+        const sharedTags = [...tagsA].filter((t) => tagsB.size > 0 && tagsB.has(t));
 
         if (sharedTags.length > 0) {
-          const edgeKey = `${items[i]._id.toString()}-${items[j]._id.toString()}`;
+          const ids = [items[i]._id.toString(), items[j]._id.toString()].sort();
+          const edgeKey = `tag-${ids[0]}-${ids[1]}`;
           if (!edgeSet.has(edgeKey)) {
             edgeSet.add(edgeKey);
             edges.push({
@@ -55,7 +64,8 @@ export async function GET() {
 
         // Same type connection (weaker)
         if (sharedTags.length === 0 && items[i].type === items[j].type) {
-          const edgeKey = [items[i]._id.toString(), items[j]._id.toString()].sort().join('-');
+          const ids = [items[i]._id.toString(), items[j]._id.toString()].sort();
+          const edgeKey = `type-${ids[0]}-${ids[1]}`;
           if (!edgeSet.has(edgeKey)) {
             edgeSet.add(edgeKey);
             edges.push({
@@ -72,7 +82,8 @@ export async function GET() {
           const dayA = new Date(items[i].createdAt).toDateString();
           const dayB = new Date(items[j].createdAt).toDateString();
           if (dayA === dayB) {
-            const edgeKey = [items[i]._id.toString(), items[j]._id.toString()].sort().join('-day-');
+            const ids = [items[i]._id.toString(), items[j]._id.toString()].sort();
+            const edgeKey = `day-${ids[0]}-${ids[1]}`;
             if (!edgeSet.has(edgeKey)) {
               edgeSet.add(edgeKey);
               edges.push({
@@ -101,13 +112,14 @@ export async function GET() {
             const results = await index.query({
               vector: vec.values,
               topK: 4,
-              filter: { type: 'item' },
+              filter: { userId: userId }, // Strict user filtering in Pinecone
             });
             results.matches
               .filter((m) => m.id !== item.embeddingId && m.score && m.score > 0.7)
               .forEach((match) => {
                 const targetId = (match.metadata as { itemId: string }).itemId;
-                const edgeKey = [item._id.toString(), targetId].sort().join('-');
+                const ids = [item._id.toString(), targetId].sort();
+                const edgeKey = `semantic-${ids[0]}-${ids[1]}`;
                 if (!edgeSet.has(edgeKey)) {
                   edgeSet.add(edgeKey);
                   edges.push({
