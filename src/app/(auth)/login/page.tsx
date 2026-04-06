@@ -89,6 +89,7 @@ function LoginForm() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@company.com"
                   required
+                  suppressHydrationWarning
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white text-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 hover:bg-white/10"
                 />
               </div>
@@ -133,8 +134,8 @@ function LoginForm() {
 
           <p className="mt-8 text-center text-white/20 text-xs">
             New here? {' '}
-            <Link href="/" className="text-white/60 hover:text-white transition-colors">
-              Return to architecture
+            <Link href="/register" className="text-white/60 hover:text-white transition-colors">
+              Initialize Profile
             </Link>
           </p>
         </div>

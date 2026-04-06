@@ -1,0 +1,13 @@
+import { AuthProvider } from "@/components/providers/AuthProvider";
+
+export default function AuthLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="min-h-screen bg-[#050505]">
+      {children}
+    </div>
+  );
+}

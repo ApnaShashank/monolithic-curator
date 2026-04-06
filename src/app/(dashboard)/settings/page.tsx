@@ -23,8 +23,8 @@ export default function Settings() {
   };
 
   return (
-    <main className="md:pl-64 bg-[#050505] min-h-screen w-full overflow-x-hidden">
-      <div className="max-w-3xl mx-auto py-12 px-6 md:px-10">
+    <main className="page-container">
+      <div className="max-w-3xl">
         {/* Header */}
         <header className="mb-10">
           <span className="text-[9px] text-white/15 font-medium tracking-widest uppercase mb-2 block">Configuration</span>

@@ -85,6 +85,7 @@ export default function RegisterPage() {
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Leonardo"
                     required
+                    suppressHydrationWarning
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white text-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 hover:bg-white/10"
                   />
                 </div>
@@ -97,6 +98,7 @@ export default function RegisterPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="neuro@curator.ai"
                     required
+                    suppressHydrationWarning
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white text-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 hover:bg-white/10"
                   />
                 </div>
@@ -109,6 +111,7 @@ export default function RegisterPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     required
+                    suppressHydrationWarning
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white text-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 hover:bg-white/10"
                   />
                 </div>

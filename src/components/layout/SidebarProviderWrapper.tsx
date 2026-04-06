@@ -11,29 +11,27 @@ import FloatingAssistant from "../ai/FloatingAssistant";
 
 function LayoutContent({ children }: { children: React.ReactNode }) {
   const { isOpen, closeSidebar } = useSidebar();
-  const pathname = usePathname();
-  const isLandingPage = pathname === "/";
 
   return (
     <>
-      {!isLandingPage && <TopNavBar />}
+      <TopNavBar />
       
       {/* Mobile Overlay */}
-      {isOpen && !isLandingPage && (
+      {isOpen && (
         <div 
           className="sidebar-overlay" 
           onClick={closeSidebar}
         />
       )}
 
-      {!isLandingPage && <SideNavBar />}
+      <SideNavBar />
       
-      <div className={`main-content-wrapper ${isOpen && !isLandingPage ? "content-shifted" : ""}`}>
+      <div className={`main-content-wrapper ${isOpen ? "content-shifted" : ""}`}>
         {children}
       </div>
       
-      {!isLandingPage && <BottomNavBar />}
-      {!isLandingPage && <FloatingAssistant />}
+      <BottomNavBar />
+      <FloatingAssistant />
     </>
   );
 }

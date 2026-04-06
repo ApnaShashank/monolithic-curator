@@ -36,9 +36,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased font-body min-h-screen flex flex-col relative" suppressHydrationWarning>
         <AuthProvider>
-          <SidebarProviderWrapper>
-            {children}
-          </SidebarProviderWrapper>
+          {children}
         </AuthProvider>
       </body>
     </html>

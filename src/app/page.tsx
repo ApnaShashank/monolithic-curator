@@ -123,7 +123,7 @@ export default function LandingPage() {
       </div>
 
       {/* Main Content Layout */}
-      <div className="relative z-20 flex flex-col items-center justify-start h-full w-full max-w-5xl px-6 pt-12 md:pt-20">
+      <div className="relative z-20 flex flex-col items-center justify-center h-full w-full max-w-5xl px-6">
         {/* Neural Core Visualization (TOP POSITION) */}
         <motion.div
            initial={{ opacity: 0, scale: 0.8 }}
@@ -182,15 +182,6 @@ export default function LandingPage() {
 
         {/* Text Content */}
         <div className="text-center w-full">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-          >
-            <h2 className="text-[9px] md:text-xs font-mono font-medium text-white/30 uppercase tracking-[0.5em] mb-4">
-              The Artificial Intelligence Operating System
-            </h2>
-          </motion.div>
 
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
