@@ -37,9 +37,8 @@ export default function ExtensionPage() {
   return (
     <main className="page-container relative overflow-hidden min-h-[calc(100vh-4rem)]">
       {/* Background Decorative Elements */}
-      <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-blue-600/5 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[40%] h-[40%] bg-purple-600/5 blur-[120px] rounded-full pointer-events-none" />
-
+      <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-surface-container-low blur-[120px] rounded-full pointer-events-none opacity-20" />
+      
       <div className="max-w-4xl mx-auto relative">
         {/* Header */}
         <section className="text-center mb-20 pt-10">
@@ -48,22 +47,21 @@ export default function ExtensionPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <span className="text-[10px] font-bold text-blue-400 uppercase tracking-[0.3em] mb-4 block">Peripheral Interface</span>
+            <span className="noteslia-header mb-4 block text-center">Capture Module</span>
             <h1 className="text-4xl md:text-6xl font-headline font-bold text-white tracking-tight mb-6">
-              Extend your consciousness.
+              Extend your <span className="text-tertiary">Architecture</span>.
             </h1>
             <p className="text-lg text-white/30 max-w-2xl mx-auto leading-relaxed mb-10">
-              The Monolithic Curator extension allows you to capture knowledge fragments directly from any web page without breaking your flow.
+              The Noteslia extension allows you to capture knowledge fragments directly from any web page without breaking your flow.
             </p>
             
             <button
               onClick={handleDownload}
-              className="group relative inline-flex items-center gap-3 bg-white text-black font-bold px-8 py-4 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.95] shadow-[0_0_40px_rgba(255,255,255,0.1)]"
+              className="bg-primary text-background font-bold px-10 py-5 transition-all hover:bg-neutral-200 active:scale-[0.95]"
             >
-              <span className="material-symbols-outlined group-hover:animate-bounce">download</span>
-              Download Neural Capture Utility
+              Download Capture Utility
             </button>
-            <p className="text-[10px] text-white/10 mt-4 uppercase tracking-widest">Version 1.0.4 • Manifest v3</p>
+            <p className="text-[10px] text-white/10 mt-6 uppercase tracking-widest font-mono">Build v1.2.4 • Manifest v3</p>
           </motion.div>
         </section>
 

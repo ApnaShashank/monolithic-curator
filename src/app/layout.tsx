@@ -10,15 +10,15 @@ import SidebarProviderWrapper from "@/components/layout/SidebarProviderWrapper";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 
 export const metadata: Metadata = {
-  title: "Monolithic Curator | Neural Knowledge Engine",
-  description: "Architect your neural memory with Monolithic Curator. Automatically index, classify, and connect every fragment of your knowledge using advanced AI and vector embeddings.",
+  title: "Noteslia | Thought Architecture Engine",
+  description: "Noteslia helps you architect your digital memory. Organize, connect, and retrieve every thought with a high-performance, grid-based interface.",
   icons: {
     icon: "/Monolithic Curator Icon.png",
     apple: "/Monolithic Curator Icon.png",
   },
   openGraph: {
-    title: "Monolithic Curator | Neural Knowledge Engine",
-    description: "Architect your neural memory with AI-powered knowledge management.",
+    title: "Noteslia | Thought Architecture Engine",
+    description: "Architect your thoughts with Noteslia's precision design system.",
     images: ["/Monolithic Curator Icon.png"],
   },
 };

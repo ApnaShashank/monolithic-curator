@@ -49,10 +49,10 @@ export default function TopNavBar() {
             <span className="material-symbols-outlined">menu</span>
           </button>
           <div className="hidden sm:flex items-center gap-2.5">
-            <div className="w-6 h-6 rounded-md bg-white flex items-center justify-center">
-              <span className="text-black text-[10px] font-black tracking-tighter">MC</span>
+            <div className="w-6 h-6 rounded bg-on-background flex items-center justify-center">
+              <span className="text-background text-[10px] font-black tracking-tighter">N</span>
             </div>
-            <span className="text-sm font-semibold tracking-tight text-white/90">Monolithic Curator</span>
+            <span className="text-sm font-headline font-bold tracking-tight text-white/90">Noteslia</span>
           </div>
         </div>
         <div className="flex items-center gap-2">

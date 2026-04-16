@@ -55,43 +55,43 @@ export default function Dashboard() {
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
             <span className="text-[10px] font-medium text-white/30 uppercase tracking-[0.2em]">
-              {total > 0 ? `${total} fragments indexed` : 'Waiting for input'}
+              {total > 0 ? `${total} thoughts architected` : 'Waiting for input'}
             </span>
           </div>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-headline font-extrabold leading-[0.95] text-white tracking-tighter">
-            Your second<br />brain, organized.
+            Architect your<br />digital memory.
           </h1>
           <p className="text-base md:text-lg text-white/30 max-w-xl leading-relaxed">
-            Automatically index, classify, and connect everything you save using vector embeddings and semantic intelligence.
+            Noteslia empowers you to index, connect, and structure every fragment of knowledge with precision using AI-driven architecture.
           </p>
         </div>
       </section>
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-16">
-        <div className="glass-card p-5 group hover:bg-white/[0.05] transition-all">
+        <div className="glass-card p-5 group hover:bg-white/5 transition-all">
           <span className="material-symbols-outlined text-white/20 mb-3 text-2xl group-hover:text-white/40 transition-colors">database</span>
           <p className="text-2xl font-headline font-bold text-white">{total}</p>
-          <p className="text-[10px] text-white/20 uppercase tracking-widest font-medium mt-1">Artifacts</p>
+          <p className="text-[10px] text-white/20 uppercase tracking-widest font-medium mt-1">Fragments</p>
         </div>
-        <div className="glass-card p-5 group hover:bg-white/[0.05] transition-all">
+        <div className="glass-card p-5 group hover:bg-white/5 transition-all">
           <span className="material-symbols-outlined text-white/20 mb-3 text-2xl group-hover:text-white/40 transition-colors">psychology</span>
           <div className="flex items-center gap-2">
             <p className="text-2xl font-headline font-bold text-white">Live</p>
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
           </div>
-          <p className="text-[10px] text-white/20 uppercase tracking-widest font-medium mt-1">AI Engine</p>
+          <p className="text-[10px] text-white/20 uppercase tracking-widest font-medium mt-1">Noteslia AI</p>
         </div>
-        <div className="glass-card p-5 group hover:bg-white/[0.05] transition-all">
+        <div className="glass-card p-5 group hover:bg-white/5 transition-all">
           <span className="material-symbols-outlined text-white/20 mb-3 text-2xl group-hover:text-white/40 transition-colors">hub</span>
           <p className="text-2xl font-headline font-bold text-white">Active</p>
           <p className="text-[10px] text-white/20 uppercase tracking-widest font-medium mt-1">Graph</p>
         </div>
-        <Link href="/library" className="bg-white p-5 rounded-2xl flex flex-col justify-between group transition-all hover:scale-[1.02] active:scale-[0.98]">
-           <span className="material-symbols-outlined text-black/40 mb-3 text-2xl group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        <Link href="/library" className="bg-on-background p-5 rounded-2xl flex flex-col justify-between group transition-all hover:scale-[1.02] active:scale-[0.98]">
+           <span className="material-symbols-outlined text-background/40 mb-3 text-2xl group-hover:translate-x-1 transition-transform">arrow_forward</span>
            <div>
-             <p className="text-sm font-bold text-black leading-tight">Explore Archive</p>
-             <p className="text-[10px] text-black/40 mt-0.5">Browse all saved items</p>
+             <p className="text-sm font-bold text-background leading-tight">Architecture</p>
+             <p className="text-[10px] text-background/40 mt-0.5">Browse your entire library</p>
            </div>
         </Link>
       </div>
@@ -100,8 +100,8 @@ export default function Dashboard() {
       <section className="mb-16">
         <div className="flex items-center gap-3 mb-6">
           <span className="material-symbols-outlined text-white/20 text-xl">auto_awesome</span>
-          <h2 className="text-lg font-headline font-bold text-white tracking-tight">Resurfacing</h2>
-          <div className="h-px flex-1 bg-white/[0.04] ml-2" />
+          <h2 className="text-lg font-headline font-bold text-white tracking-tight">Intelligence</h2>
+          <div className="h-px flex-1 bg-white/4 ml-2" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -130,10 +130,10 @@ export default function Dashboard() {
         </div>
       </section>
 
-      {/* Recently Captured */}
+      {/* Recent Activity */}
       <section className="mb-16">
         <div className="flex items-baseline justify-between mb-6">
-          <h2 className="text-lg font-headline font-bold text-white tracking-tight">Recent</h2>
+          <h2 className="text-lg font-headline font-bold text-white tracking-tight">Latest Entries</h2>
           <Link href="/library" className="text-[10px] font-medium text-white/20 hover:text-white/50 uppercase tracking-widest transition-colors">
             View all →
           </Link>

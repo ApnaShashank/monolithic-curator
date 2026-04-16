@@ -54,16 +54,17 @@ function LoginForm() {
         <div className="absolute -inset-0.5 bg-linear-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur opacity-30" />
         
         <div className="relative bg-[#0A0A0A]/80 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 md:p-10 shadow-2xl">
+        <div className="relative bg-[#0A0A0A] border border-white/10 rounded-none p-8 md:p-10">
           <div className="text-center mb-10">
             <motion.div 
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/5 border border-white/10 mb-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="inline-flex items-center justify-center w-16 h-16 bg-white flex items-center justify-center mb-6"
             >
-              <img src="/Monolithic Curator Icon.png" alt="Logo" className="w-10 h-10 object-contain" />
+               <span className="text-2xl font-headline font-black text-black">N</span>
             </motion.div>
-            <h1 className="text-3xl font-headline font-bold text-white tracking-tight mb-2">Welcome Back</h1>
-            <p className="text-white/40 text-sm">Access your neural memory core</p>
+            <h1 className="text-3xl font-headline font-bold text-white tracking-tight mb-2">Access Core</h1>
+            <p className="text-white/40 text-sm">Enter your credentials to continue</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -73,7 +74,7 @@ function LoginForm() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-red-400 text-xs text-center font-medium"
+                  className="bg-red-500/10 border border-red-500/20 rounded-none p-3 text-red-400 text-xs text-center font-medium"
                 >
                   {error}
                 </motion.div>
@@ -90,7 +91,7 @@ function LoginForm() {
                   placeholder="name@company.com"
                   required
                   suppressHydrationWarning
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white text-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 hover:bg-white/10"
+                  className="w-full bg-transparent border border-white/10 rounded-none px-4 py-3.5 text-white text-sm transition-all focus:outline-none focus:border-white/30"
                 />
               </div>
 
@@ -102,7 +103,7 @@ function LoginForm() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white text-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 hover:bg-white/10"
+                  className="w-full bg-transparent border border-white/10 rounded-none px-4 py-3.5 text-white text-sm transition-all focus:outline-none focus:border-white/30"
                 />
               </div>
             </div>
@@ -110,9 +111,8 @@ function LoginForm() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full relative group overflow-hidden bg-white text-black font-bold py-4 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-primary text-black font-bold py-4 transition-all hover:bg-neutral-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <div className="absolute inset-0 bg-linear-to-r from-blue-400/20 to-purple-400/20 opacity-0 group-hover:opacity-100 transition-opacity" />
               <span className="relative flex items-center justify-center gap-2">
                 {isLoading ? (
                   <motion.span 
@@ -124,8 +124,8 @@ function LoginForm() {
                   </motion.span>
                 ) : (
                   <>
-                    Initialize Session
-                    <span className="material-symbols-outlined text-[18px]">key</span>
+                    Initialize
+                    <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
                   </>
                 )}
               </span>
@@ -144,23 +144,18 @@ function LoginForm() {
   );
 }
 
-export default function LoginPage() {
-  return (
-    <main className="relative h-dvh w-full bg-[#050505] overflow-hidden flex items-center justify-center selection:bg-white/10 selection:text-white">
-      {/* Background Blobs (Matches Landing Page) */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/5 blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-purple-600/5 blur-[150px]" />
-      </div>
+    <main className="relative h-dvh w-full bg-background overflow-hidden flex items-center justify-center selection:bg-accent selection:text-white">
+      {/* Interactive Grid Background */}
+      <div className="absolute inset-0 noteslia-grid opacity-5 pointer-events-none" />
 
-      <Suspense fallback={<div className="text-white/20 animate-pulse">Synchronizing...</div>}>
+      <Suspense fallback={<div className="text-white/20 animate-pulse uppercase tracking-widest font-mono text-xs">Synchronizing...</div>}>
         <LoginForm />
       </Suspense>
       
       {/* Footer Branding */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 opacity-20 pointer-events-none select-none">
         <span className="text-[10px] font-mono tracking-[0.5em] text-white uppercase">
-          Neural Interface Secure
+          Noteslia Secure Substrate
         </span>
       </div>
     </main>

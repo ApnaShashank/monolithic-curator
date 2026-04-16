@@ -193,10 +193,10 @@ export default function Settings() {
                 <label className="text-[9px] uppercase tracking-widest text-white/15 font-medium px-1">API Key</label>
                 <div className="relative">
                   <input 
-                    className="w-full bg-white/3 border border-white/6 rounded-lg px-3 py-2.5 text-sm text-white/30 outline-none" 
+                    className="w-full bg-white/3 border border-white/6 rounded-none px-3 py-2.5 text-sm text-white/30 outline-none" 
                     readOnly 
                     type={showKey ? "text" : "password"} 
-                    defaultValue="sk_monolith_7721_v923184210" 
+                    defaultValue="sk_noteslia_7721_v923184210" 
                   />
                   <button 
                     onClick={() => setShowKey(!showKey)}

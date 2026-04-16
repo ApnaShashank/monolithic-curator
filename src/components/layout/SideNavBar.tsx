@@ -15,7 +15,7 @@ export default function SideNavBar() {
 
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: "space_dashboard" },
-    { name: "Neural Chat", href: "/neural-chat", icon: "psychology" },
+    { name: "Noteslia AI", href: "/neural-chat", icon: "psychology" },
     { name: "Library", href: "/library", icon: "inventory_2" },
     { name: "Search", href: "/search", icon: "search" },
     { name: "Knowledge Graph", href: "/knowledge-graph", icon: "hub" },
@@ -33,7 +33,7 @@ export default function SideNavBar() {
 
   return (
     <>
-      <aside className={`fixed left-0 top-0 h-full w-60 bg-black/60 backdrop-blur-xl border-r border-white/5 flex flex-col py-6 px-3 z-50 mt-14 transition-transform duration-300 transform ${
+      <aside className={`fixed left-0 top-0 h-full w-60 bg-surface border-r border-outline-variant flex flex-col py-6 px-3 z-50 mt-14 transition-transform duration-300 transform ${
         isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
       } ${!isOpen ? "md:hidden" : ""}`}>
         
@@ -45,28 +45,28 @@ export default function SideNavBar() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] transition-all duration-200 ${
+                className={`flex items-center gap-2.5 px-3 py-2 rounded text-[13px] transition-all duration-200 ${
                   isActive 
-                    ? "text-white bg-white/10 font-medium" 
-                    : "text-white/30 hover:text-white/60 hover:bg-white/5"
+                    ? "text-primary bg-surface-container-high font-semibold" 
+                    : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
                 }`}
               >
                 <span className="material-symbols-outlined text-[18px]">{item.icon}</span>
                 <span>{item.name}</span>
-                {isActive && <div className="ml-auto w-1 h-1 rounded-full bg-white" />}
+                {isActive && <div className="ml-auto w-1 h-1 rounded-full bg-primary" />}
               </Link>
             );
           })}
         </div>
         
         {/* Bottom Section */}
-        <div className="pt-3 border-t border-white/5 space-y-1">
+        <div className="pt-3 border-t border-outline-variant space-y-1">
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="w-full flex items-center justify-center gap-2 bg-white text-black py-2.5 rounded-lg font-semibold text-xs active:scale-95 transition-all hover:bg-white/90"
+            className="w-full flex items-center justify-center gap-2 bg-on-background text-background py-2.5 rounded font-bold text-xs active:scale-95 transition-all hover:bg-on-background/90"
           >
             <span className="material-symbols-outlined text-[16px]">add</span>
-            Capture Thought
+            New Entry
           </button>
           
           <div className="mt-2 space-y-0.5">
@@ -76,10 +76,10 @@ export default function SideNavBar() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] transition-all ${
+                  className={`flex items-center gap-2.5 px-3 py-2 rounded text-[13px] transition-all ${
                     isActive 
-                      ? "text-white bg-white/10 font-medium" 
-                      : "text-white/25 hover:text-white/50 hover:bg-white/5"
+                      ? "text-primary bg-surface-container-high font-semibold" 
+                      : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
                   }`}
                 >
                   <span className="material-symbols-outlined text-[18px]">{item.icon}</span>
@@ -90,7 +90,7 @@ export default function SideNavBar() {
             
             <button
               onClick={handleSignOut}
-              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-red-400/60 hover:text-red-400 hover:bg-red-400/5 transition-all"
+              className="w-full flex items-center gap-2.5 px-3 py-2 rounded text-[13px] text-error/60 hover:text-error hover:bg-error/10 transition-all text-left"
             >
               <span className="material-symbols-outlined text-[18px]">logout</span>
               <span>Sign Out</span>
